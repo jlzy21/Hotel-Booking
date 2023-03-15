@@ -44,3 +44,6 @@ Route::get('logout', [LoginController::class, 'logout']);
 // Make sure to remove before submitting as it allows unauthenticated users 
 // to enter the home page
 // Route::view('home', 'home');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

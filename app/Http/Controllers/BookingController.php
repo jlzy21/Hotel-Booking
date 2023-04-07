@@ -4,36 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Log;
+use Illuminate\Support\Facades\Auth;
 
-class BookingController extends Controller
-{
-    public function createBooking(Request $request)
-    {
-        $validatedData = $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'roomtype' => 'required',
-            'roomnumber' => 'required',
+class BookingController extends Controller {
+    // Function to add new bookings to the database
+    function addBooking(Request $request) {
+        $this -> validate($request, [
+            'fName' => 'required',
+            'lName' => 'required',
+            'roomType' => 'required',
+            'roomNumber' => 'required',
             'email' => 'required',
-            'idcard' => 'required',
+            'idCard' => 'required',
             'phone' => 'required',
-            'residentialaddress' => 'required',
+            'address' => 'required',
             'city' => 'required',
-            'zipcode' => 'required',
+            'zipCode' => 'required',
             'amount' => 'required',
-            'checkindate' => 'required',
-            'checkoutdate' => 'required',
+            'checkInDate' => 'required',
+            'checkOutDate' => 'required',
         ]);
 
-        $booking = new Booking;
-        $booking->fill($validatedData);
-        $booking->checkedin = false;
-        $booking->checkedout = false;
-        $booking->paidamount = 0;
-        $booking->deposit = 0;
-        $booking->save();
+        $data = $request -> all();
+        // Adding default data
+        $data['paidAmount'] = 0;
+        $data['deposit'] = 0;
+        $data['checkedIn'] = false;
+        $data['checkedOut'] = false;
 
-        return redirect()->route('viewBookings')->with('success', 'Booking created successfully.');
+        Booking::create($data);
+        return redirect('/bookings#bookings-table');
     }
 
     public function editBooking(Request $request, $id)
@@ -52,18 +53,36 @@ class BookingController extends Controller
 
         return redirect()->route('viewBookings')->with('success', 'Booking updated successfully.');
     }
+    
+    function deleteBooking(Request $request) {
+        $data = Booking::find($request -> id);
+        $data -> delete();
 
-    public function viewBookings()
-    {
-        $bookings = Booking::all();
-        return view('bookings', ['bookings' => $bookings]);
+        if (Auth::user() -> can('isAdmin')) {
+            return redirect('/adminBooking#bookings-table');
+        } else {
+            return redirect('/bookings#bookings-table');
+        }
+    }
+    
+    function viewBookings(){
+        $data = Booking::paginate(5);
+
+        if (Auth::user() -> can('isAdmin')) {
+            return view('/adminBooking', ['bookings' => $data]);
+        } else {
+            return view('/bookings', ['bookings' => $data]);
+        }
     }
 
-    public function deleteBooking(Request $request, $id)
-    {
-        $booking = Booking::find($id);
-        $booking->delete();
-        return redirect()->route('viewBookings')->with('success', 'Booking deleted successfully.');
+    function viewBookingDetails($id){
+        try {
+            $bookingDetails = Booking::where('id', $id) -> first();
+            return response() -> json($bookingDetails);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response() -> json(['error' => 'Something went wrong.'], 500);
+        }
     }
 
 }

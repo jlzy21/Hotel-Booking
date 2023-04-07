@@ -66,19 +66,21 @@ Route::get('logout', [LoginController::class, 'logout']);
 Route::view("clerkProfile",'clerkProfile');
 
 // View booking list
-Route::view("bookings",'bookings');
-Route::get('/bookings-table', function () {
-    return redirect('/bookings#bookings-table');
-});
+// Route::view("bookings",'bookings');
+// Route::get('/bookings-table', function () {
+//     return redirect('/bookings#bookings-table');
+// });
 
 // Get reservation-form
 Route::get('/reservation-form', function () {
     return redirect('/home#submitReservationForm');
 });
 
-/* Clerk createBooking routes */
-//Route::get('/complaints', [ComplaintController::class, 'viewComplaints']); view by default == home
+// Booking Routes
+Route::get('/bookings', [BookingController::class, 'viewBookings']);
 Route::post('/home', [BookingController::class, 'createBooking']);
+Route::post('/bookings/edit/{id}', [BookingController::class, 'editBooking']);
+Route::get('/bookings/delete/{id}', [BookingController::class, 'deleteBooking']);
 
 
 Route::view("about",'about');

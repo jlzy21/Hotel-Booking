@@ -40,19 +40,19 @@
 
 
             <ul class="nav-links" id="nav-links">
-                <li><a class="{{ Request::is('home') ? 'active' : '' }}" href="home">Home</a></li>
-                <li><a class="{{ Request::is('bookings*') ? 'active' : '' }}" href="bookings">Bookings</a></li>
-                <li><a class="{{ Request::is('about') ? 'active' : '' }}" href="about">About Us</a></li>
-                <li><a class="{{ Request::is('complaints') ? 'active' : '' }}" href="complaints">Complaints</a></li>
+                <li><a class="{{ Request::is('home') ? 'active' : '' }}" href="/home">Home</a></li>
+                <li><a class="{{ Request::is('bookings*') ? 'active' : '' }}" href="/bookings">Bookings</a></li>
+                <li><a class="{{ Request::is('about') ? 'active' : '' }}" href="/about">About Us</a></li>
+                <li><a class="{{ Request::is('complaints') ? 'active' : '' }}" href="/complaints">Complaints</a></li>
             </ul>
 
             <div class="dropdown">
-                <button class="dropbtn"> User
+                <button class="dropbtn"> {{ Auth::user() -> name }}
                     <i class="fa-solid fa-caret-down"></i>
                 </button>
 
                 <div class="dropdown-content">
-                    <a href="clerkProfile"> Profile </a>
+                    <a href="/profile"> Profile </a>
                     <a href="{{ route('logout') }}" 
                         onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"> Logout </a>
@@ -62,7 +62,10 @@
                 </div>
             </div>
         </nav>
-        
+
+        <!-- To display flash session messages -->
+        <x-flash admin="false"/>
+
         @yield('content')
 
         <!--------------- Footer -------------->
@@ -81,6 +84,7 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
         <script src="https://unpkg.com/scrollreveal"></script>
 
         <script src="/assets/phone/js/intlTelInput.js"> </script>

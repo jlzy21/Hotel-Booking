@@ -3,12 +3,13 @@
 @section('content')
 
 <div class="container">
-
     <div class="container-all-complaint">
         <div class="container-complaint-form">
             <div class="add-colour"></div>
             <br ><br><br>
+
             <h2 class="sub-title">Complaint Management</h2>
+            
             <form method="POST" label="{{ __('Submit') }}" id="submitComplaintForm">
                 @csrf
                 <h3>Complaint Form</h3>
@@ -84,27 +85,6 @@
             <hr>
 
             <div class="complaints-table">
-                <div class="entries-search">
-                    <div class="show-entries">
-                        <label for="entries-per-page-complaints">Show:</label>
-                        <select id="entries-per-page-complaints" class="select-entries">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                        </select>
-                        <span>entries</span>
-                    </div>
-                    <div class="search-section">
-                        <div class="search">
-                            <label class="search-label" for="search-bar-complaints">Search</label>
-                            <input type="search" id="search-bar-complaints" class="search-bar" />
-                        </div>
-                        <button type="button" class="search-btn" id="search-btn-complaints">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
                 <table id="complaints-table">
                     <thead>
                         <tr class="table-head">
@@ -148,7 +128,7 @@
                     </tbody>
                 </table>
 
-                {!! $complaints->links('vendor.pagination.custom') !!}
+                {!! $complaints->links('vendor.pagination.custom', ['tableID' => 'complaints-table']) !!}
 
                 <div class="resolve-overlay" id="resolve-overlay">
                     <div class="resolve-container">
